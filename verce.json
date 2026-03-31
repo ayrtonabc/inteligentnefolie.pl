@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
+    { "src": "/cms/assets/(.*)", "dest": "/cms/assets/$1" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/cms/(.*)", "dest": "/cms/index.html" },
+    { "src": "/panel(?:/.*)?", "dest": "/cms/index.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
+

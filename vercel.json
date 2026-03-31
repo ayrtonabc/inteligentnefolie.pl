@@ -1,15 +1,14 @@
+
 {
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" },
+  "routes": [
+    { "src": "^/panel/assets/(.*)$", "dest": "/panel/assets/$1" },
+    { "src": "^/assets/(.*)$", "dest": "/assets/$1" },
 
-    { "source": "/panel", "destination": "/cms/index.html" },
-    { "source": "/panel/:path*", "destination": "/cms/index.html" },
+    { "src": "^/panel(?:/.*)?$", "dest": "/panel/index.html" },
 
-    { "source": "/cms/:path*", "destination": "/cms/index.html" },
-
-    { "source": "/:path*", "destination": "/" }
+    { "src": "^/(.*)$", "dest": "/index.html" }
   ]
 }

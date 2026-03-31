@@ -1,15 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "routes": [
-    { "handle": "filesystem" },
+  "rewrites": [
+    { "source": "/panel", "destination": "/cms/index.html" },
+    { "source": "/panel/:path*", "destination": "/cms/index.html" },
 
-    { "src": "^/panel$", "dest": "/cms/index.html" },
-    { "src": "^/panel/(.*)", "dest": "/cms/index.html" },
-
-    { "src": "^/cms$", "dest": "/cms/index.html" },
-    { "src": "^/cms/(.*)", "dest": "/cms/index.html" },
-
-    { "src": "^(.*)$", "dest": "/index.html" }
+    { "source": "/:path*", "destination": "/index.html" }
   ]
 }

@@ -1,6 +1,11 @@
-
 {
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/panel/:path*", "destination": "/cms/index.html" },
+    { "source": "/cms/:path*", "destination": "/cms/index.html" },
+    { "source": "/:path*", "destination": "/" }
   ]
 }

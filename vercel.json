@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
   "routes": [
@@ -11,6 +10,6 @@
     { "src": "^/cms$", "dest": "/cms/index.html" },
     { "src": "^/cms/(.*)", "dest": "/cms/index.html" },
 
-    { "src": "^(.*)$", "dest": "/" }
+    { "src": "^(.*)$", "dest": "/index.html" }
   ]
 }

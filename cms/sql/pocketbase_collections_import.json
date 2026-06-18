@@ -1,0 +1,102 @@
+[
+  {
+    "name": "menu_categories",
+    "type": "base",
+    "fields": [
+      { "name": "website_id", "type": "text", "required": true },
+      { "name": "name", "type": "text", "required": true },
+      { "name": "slug", "type": "text" },
+      { "name": "description", "type": "text" },
+      { "name": "image_url", "type": "url" },
+      { "name": "sort_order", "type": "number", "options": { "min": 0 } },
+      { "name": "is_active", "type": "bool" },
+      { "name": "is_featured", "type": "bool" }
+    ]
+  },
+  {
+    "name": "menu_products",
+    "type": "base",
+    "fields": [
+      { "name": "website_id", "type": "text", "required": true },
+      { "name": "category_id", "type": "text", "required": true },
+      { "name": "name", "type": "text", "required": true },
+      { "name": "slug", "type": "text" },
+      { "name": "description", "type": "text" },
+      { "name": "short_description", "type": "text" },
+      { "name": "price", "type": "number", "required": true, "options": { "min": 0 } },
+      { "name": "compare_price", "type": "number" },
+      { "name": "currency", "type": "text" },
+      { "name": "sku", "type": "text" },
+      { "name": "is_available", "type": "bool" },
+      { "name": "is_featured", "type": "bool" },
+      { "name": "is_vegetarian", "type": "bool" },
+      { "name": "is_vegan", "type": "bool" },
+      { "name": "is_gluten_free", "type": "bool" },
+      { "name": "is_spicy", "type": "bool" },
+      { "name": "spice_level", "type": "number" },
+      { "name": "prep_time_minutes", "type": "number" },
+      { "name": "sort_order", "type": "number" },
+      { "name": "image_url", "type": "url" }
+    ]
+  },
+  {
+    "name": "restaurant_tables",
+    "type": "base",
+    "fields": [
+      { "name": "website_id", "type": "text", "required": true },
+      { "name": "number", "type": "text", "required": true },
+      { "name": "qr_code_url", "type": "url" },
+      { "name": "capacity", "type": "number", "options": { "min": 1 } },
+      { "name": "position_x", "type": "number" },
+      { "name": "position_y", "type": "number" },
+      { "name": "is_active", "type": "bool" },
+      { "name": "notes", "type": "text" }
+    ]
+  },
+  {
+    "name": "restaurant_orders",
+    "type": "base",
+    "fields": [
+      { "name": "website_id", "type": "text", "required": true },
+      { "name": "table_id", "type": "text" },
+      { "name": "table_number", "type": "text" },
+      { "name": "order_number", "type": "text" },
+      { "name": "customer_name", "type": "text" },
+      { "name": "customer_phone", "type": "text" },
+      { "name": "status", "type": "select", "options": { "values": ["pending", "confirmed", "preparing", "ready", "delivered", "completed", "cancelled"] } },
+      { "name": "payment_status", "type": "select", "options": { "values": ["pending", "paid", "failed", "refunded"] } },
+      { "name": "payment_method", "type": "select", "options": { "values": ["cash", "card", "online"] } },
+      { "name": "subtotal", "type": "number" },
+      { "name": "tax_amount", "type": "number" },
+      { "name": "total_amount", "type": "number" },
+      { "name": "notes", "type": "text" },
+      { "name": "source", "type": "text" }
+    ]
+  },
+  {
+    "name": "restaurant_order_items",
+    "type": "base",
+    "fields": [
+      { "name": "order_id", "type": "text", "required": true },
+      { "name": "product_id", "type": "text" },
+      { "name": "product_name", "type": "text", "required": true },
+      { "name": "product_price", "type": "number", "required": true },
+      { "name": "quantity", "type": "number", "required": true, "options": { "min": 1 } },
+      { "name": "subtotal", "type": "number" },
+      { "name": "notes", "type": "text" },
+      { "name": "status", "type": "select", "options": { "values": ["pending", "preparing", "ready", "delivered"] } }
+    ]
+  },
+  {
+    "name": "restaurant_settings",
+    "type": "base",
+    "fields": [
+      { "name": "website_id", "type": "text", "required": true },
+      { "name": "restaurant_name", "type": "text" },
+      { "name": "currency", "type": "text" },
+      { "name": "tax_rate", "type": "number" },
+      { "name": "is_active", "type": "bool" },
+      { "name": "settings", "type": "json" }
+    ]
+  }
+]

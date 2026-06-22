@@ -5,21 +5,22 @@ const TPAY_MERCHANT_ID = process.env.TPAY_CLIENT_ID?.split('-')[0] || ''
 const TPAY_CLIENT_SECRET = process.env.TPAY_SECRET_KEY || ''
 const TPAY_IS_SANDBOX = process.env.NODE_ENV !== 'production'
 
-interface CartItem {
+export interface CartItem {
   id: string
   name: string
   price_cents: number
   quantity: number
 }
 
-interface CheckoutRequest {
+export interface CheckoutRequest {
   items: CartItem[]
   customerEmail: string
   customerName: string
   totalCents: number
+  currency?: string
 }
 
-function generateOrderId(): string {
+export function generateOrderId(): string {
   return 'ORD-' + Date.now() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase()
 }
 

@@ -12,6 +12,8 @@ type Props = {
 
 export default function PaymentQr({ data, onClose, onClear }: Props) {
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [notifying, setNotifying] = useState(false);
+  const [notConfirmed, setNotConfirmed] = useState(false);
   const timerRef = useRef<number | null>(null);
 
   const formatPrice = (cents: number | undefined | null): string => {
@@ -21,6 +23,7 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
 
   useEffect(() => {
     if (!data) return;
+    setNotConfirmed(false);
 
     const np = data.nowPayments || {};
     const exp = np.expiration_estimate_date || np.valid_until || null;
@@ -69,8 +72,6 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
 
   const np = data.nowPayments || {};
 
-  const [notifying, setNotifying] = useState(false);
-
   const getPaymentId = () => {
     return (
       data?.payment_id ||
@@ -89,6 +90,7 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
     }
 
     setNotifying(true);
+    setNotConfirmed(false);
     try {
       const res = await fetch('/api/checkout/now-payments/ipn', {
         method: 'POST',
@@ -98,17 +100,17 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
       const result = await res.json();
 
       const status = result?.status || null;
-      const isPaid = status === 'finished' || status === 'confirmed' || status === 'completed' || status === 'paid';
+      const isPaid = status === 'finished' || status === 'already_paid';
       const order = result?.order || null;
 
-      /*if (isPaid) {
-        window.location.href = `/api/checkout/result?payment=success&order=${order || ''}`;
+      if (isPaid) {
+        window.location.href = `/zaplacono?transaction_id=${order.transaction_id}`;
       } else {
-        window.location.href = `/api/checkout/result?payment=error`;
-      }*/
+        setNotConfirmed(true);
+      }
     } catch (err) {
       console.error('Notify error', err);
-      window.location.href = `/api/checkout/result?payment=error`;
+      setNotConfirmed(true);
     } finally {
       setNotifying(false);
     }
@@ -190,6 +192,14 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
           )}
         </button>
       </div>
+
+      {notConfirmed && (
+        <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="text-sm text-amber-800 text-center">
+            Płatność nie została jeszcze potwierdzona. Spróbuj ponownie za chwilę.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

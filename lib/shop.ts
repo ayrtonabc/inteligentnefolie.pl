@@ -127,3 +127,107 @@ export async function getShopProductBySlug(slug: string): Promise<Product | null
     return null;
   }
 }
+
+export interface OrderItem {
+  id: string;
+  name: string;
+  price_cents: number;
+  quantity: number;
+  image: string;
+  currency: string;
+}
+
+export interface Order {
+  id: string;
+  collectionId: string;
+  order_number: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  items: OrderItem[];
+  subtotal: number;
+  shipping_cost: number;
+  tax: number;
+  discount: number;
+  total: number;
+  currency: string;
+  payment_method: string;
+  payment_status: string;
+  status: string;
+  is_paid: boolean;
+  is_shipped: boolean;
+  transaction_id: string;
+  created: string;
+}
+
+export async function getOrderById(orderId: string): Promise<Order | null> {
+  try {
+    const encodedFilter = encodeURIComponent(`id = "${orderId}"`);
+    const data = await pbFetch(`shop_orders/records?filter=${encodedFilter}&perPage=1&_cb=${Date.now()}`);
+
+    const record = data.items?.[0];
+    if (!record) return null;
+
+    return {
+      id: record.id,
+      collectionId: record.collectionId,
+      order_number: record.order_number || '',
+      customer_name: record.customer_name || '',
+      customer_email: record.customer_email || '',
+      customer_phone: record.customer_phone || '',
+      items: record.items || [],
+      subtotal: record.subtotal || 0,
+      shipping_cost: record.shipping_cost || 0,
+      tax: record.tax || 0,
+      discount: record.discount || 0,
+      total: record.total || 0,
+      currency: record.currency || 'PLN',
+      payment_method: record.payment_method || '',
+      payment_status: record.payment_status || '',
+      status: record.status || '',
+      is_paid: record.is_paid ?? false,
+      is_shipped: record.is_shipped ?? false,
+      transaction_id: record.transaction_id || '',
+      created: record.created || '',
+    };
+  } catch (error) {
+    console.error('Error fetching order by id:', error);
+    return null;
+  }
+}
+
+export async function getOrderByTransactionId(transactionId: string): Promise<Order | null> {
+  try {
+    const encodedFilter = encodeURIComponent(`transaction_id = "${transactionId}"`);
+    const data = await pbFetch(`shop_orders/records?filter=${encodedFilter}&perPage=1&_cb=${Date.now()}`);
+
+    const record = data.items?.[0];
+    if (!record) return null;
+
+    return {
+      id: record.id,
+      collectionId: record.collectionId,
+      order_number: record.order_number || '',
+      customer_name: record.customer_name || '',
+      customer_email: record.customer_email || '',
+      customer_phone: record.customer_phone || '',
+      items: record.items || [],
+      subtotal: record.subtotal || 0,
+      shipping_cost: record.shipping_cost || 0,
+      tax: record.tax || 0,
+      discount: record.discount || 0,
+      total: record.total || 0,
+      currency: record.currency || 'PLN',
+      payment_method: record.payment_method || '',
+      payment_status: record.payment_status || '',
+      status: record.status || '',
+      is_paid: record.is_paid ?? false,
+      is_shipped: record.is_shipped ?? false,
+      transaction_id: record.transaction_id || '',
+      created: record.created || '',
+    };
+  } catch (error) {
+    console.error('Error fetching order by transaction id:', error);
+    return null;
+  }
+}

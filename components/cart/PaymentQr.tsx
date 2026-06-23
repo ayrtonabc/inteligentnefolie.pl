@@ -101,11 +101,11 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
       const isPaid = status === 'finished' || status === 'confirmed' || status === 'completed' || status === 'paid';
       const order = result?.order || null;
 
-      if (isPaid) {
+      /*if (isPaid) {
         window.location.href = `/api/checkout/result?payment=success&order=${order || ''}`;
       } else {
         window.location.href = `/api/checkout/result?payment=error`;
-      }
+      }*/
     } catch (err) {
       console.error('Notify error', err);
       window.location.href = `/api/checkout/result?payment=error`;

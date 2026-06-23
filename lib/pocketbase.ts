@@ -71,6 +71,88 @@ export const pb = {
       const url = `${PB_URL}/api/collections/${name}/records?page=${page}&perPage=${perPage}${filter ? `&filter=${encodeURIComponent(filter)}` : ''}`;
       const res = await fetch(url, { cache: 'no-store' });
       return res.json();
-    }
+    },
+    getFirstListItem: async (filter: string) => {
+      const result = await pb
+        .collection(name)
+        .getList(1, 1, { filter });
+
+      if (!result.items?.length) {
+        throw new Error(
+          `No record found in ${name} with filter: ${filter}`,
+        );
+      }
+
+      return result.items[0];
+    },
+    create: async (data: any, opts: any = {}) => {
+      const url = `${PB_URL}/api/collections/${name}/records`;
+      const headers: any = {
+        'Content-Type': 'application/json',
+        ...(opts.headers || {}),
+      };
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(data),
+        cache: 'no-store',
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        // try parse json for better error messages
+        let parsed: any = text;
+        try {
+          parsed = JSON.parse(text);
+        } catch (_) {
+          // leave as raw text
+        }
+        const details = typeof parsed === 'string' ? parsed : JSON.stringify(parsed);
+        throw new Error(`PocketBase create error: ${res.status} - ${details}`);
+      }
+
+      return res.json();
+    },
+    update: async (
+      id: string,
+      data: any,
+      opts: any = {},
+    ) => {
+      const url = `${PB_URL}/api/collections/${name}/records/${id}`;
+
+      const headers: any = {
+        "Content-Type": "application/json",
+        ...(opts.headers || {}),
+      };
+
+      const res = await fetch(url, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify(data),
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+
+        let parsed: any = text;
+
+        try {
+          parsed = JSON.parse(text);
+        } catch {}
+
+        const details =
+          typeof parsed === "string"
+            ? parsed
+            : JSON.stringify(parsed);
+
+        throw new Error(
+          `PocketBase update error: ${res.status} - ${details}`,
+        );
+      }
+
+      return res.json();
+    },
   })
 };

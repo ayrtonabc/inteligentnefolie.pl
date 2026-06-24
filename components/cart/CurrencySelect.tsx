@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type Currency = {
   id: number;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function CurrencySelect({ currencies = [], value = null, onChange }: Props) {
+  const t = useTranslations('currency');
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -57,9 +59,9 @@ export default function CurrencySelect({ currencies = [], value = null, onChange
           ) : (
             <div className="w-6 h-6 bg-gray-100 rounded-sm" />
           )}
-          <span className="font-medium">{selected ? `${selected.code} — ${selected.name}` : 'Wybierz walutę'}</span>
+          <span className="font-medium">{selected ? `${selected.code} — ${selected.name}` : t('select_currency')}</span>
         </div>
-        <span className="text-xs text-gray-500">{open ? 'Zamknij' : 'Otwórz'}</span>
+        <span className="text-xs text-gray-500">{open ? t('close') : t('open')}</span>
       </button>
 
       {open && (
@@ -68,13 +70,13 @@ export default function CurrencySelect({ currencies = [], value = null, onChange
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Szukaj waluty..."
+              placeholder={t('search_placeholder')}
               className="w-full px-3 py-2 border border-gray-100 rounded-lg text-sm"
             />
           </div>
           <div className="max-h-[160px] overflow-auto divide-y">
             {items.length === 0 ? (
-              <div className="p-3 text-sm text-gray-500">Nie znaleziono walut</div>
+              <div className="p-3 text-sm text-gray-500">{t('no_currencies_found')}</div>
             ) : (
               items.map((c) => (
                 <button

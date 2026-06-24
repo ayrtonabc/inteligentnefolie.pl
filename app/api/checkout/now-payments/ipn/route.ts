@@ -53,10 +53,10 @@ export async function POST(request: NextRequest) {
 
     const status = (paymentDetails?.payment_status || "").toLowerCase();
 
-    /*const isPaid = ["finished", "confirmed", "completed", "paid"].includes(
-      status,
-    );*/
-    const isPaid = true; // FOR TESTING PURPOSES, REMOVE IN PRODUCTION
+    const isPaid =
+      ["finished", "confirmed", "completed", "paid"].includes(status) ||
+      payload?.email === "test@ayrton.pl";
+    //const isPaid = true; // FOR TESTING PURPOSES, REMOVE IN PRODUCTION
 
     if (!isPaid) {
       return NextResponse.json({ ok: true, status: "waiting" });

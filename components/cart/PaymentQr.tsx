@@ -3,6 +3,7 @@
 import QRCode from 'react-qr-code';
 import { useEffect, useRef, useState } from 'react';
 import { Copy, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   data: any;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function PaymentQr({ data, onClose, onClear }: Props) {
+  const t = useTranslations('payment');
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [notifying, setNotifying] = useState(false);
   const [notConfirmed, setNotConfirmed] = useState(false);
@@ -85,7 +87,7 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
   const complete = async () => {
     const paymentId = getPaymentId();
     if (!paymentId) {
-      alert('Brak ID płatności');
+      alert(t('no_payment_id'));
       return;
     }
 
@@ -95,7 +97,7 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
       const res = await fetch('/api/checkout/now-payments/ipn', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ payment_id: paymentId }),
+        body: JSON.stringify({ payment_id: paymentId, email: data.order.customer_email || null }),
       });
       const result = await res.json();
 
@@ -104,6 +106,8 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
       const order = result?.order || null;
 
       if (isPaid) {
+        // Clear the pending payment from localStorage
+        localStorage.removeItem('now_payments_pending_order');
         window.location.href = `/zaplacono?transaction_id=${order.transaction_id}`;
       } else {
         setNotConfirmed(true);
@@ -128,55 +132,55 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
           />
         </div>
         <div className="text-center">
-          <div className="text-sm text-gray-500">ID zamówienia</div>
+          <div className="text-sm text-gray-500">{t('order_id')}</div>
           <div className="font-semibold">{data.orderId || np.order_id}</div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-2 text-sm text-gray-700">
         <div className="flex justify-between items-center">
-          <span className="text-gray-500">Suma (fiat)</span>
+          <span className="text-gray-500">{t('fiat_sum')}</span>
           <span className="font-medium">{formatPrice(np.price_amount * 100)} zł</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-500">Kwota (crypto)</span>
+          <span className="text-gray-500">{t('crypto_amount')}</span>
           <div className="flex items-center gap-2">
             <span className="font-medium">{np.pay_amount}</span>
-            <button onClick={() => copyToClipboard(String(np.pay_amount))} className="p-1 rounded hover:bg-gray-100">
+            <button aria-label={t('copy_to_clipboard')} onClick={() => copyToClipboard(String(np.pay_amount))} className="p-1 rounded hover:bg-gray-100">
               <Copy className="w-4 h-4 text-gray-600" />
             </button>
           </div>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-500">Waluta (crypto)</span>
+          <span className="text-gray-500">{t('crypto_currency')}</span>
           <div className="flex items-center gap-2">
             <span className="font-medium uppercase">{np.pay_currency}</span>
-            <button onClick={() => copyToClipboard(String(np.pay_currency))} className="p-1 rounded hover:bg-gray-100">
+            <button aria-label={t('copy_to_clipboard')} onClick={() => copyToClipboard(String(np.pay_currency))} className="p-1 rounded hover:bg-gray-100">
               <Copy className="w-4 h-4 text-gray-600" />
             </button>
           </div>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-500">Adres płatności</span>
+          <span className="text-gray-500">{t('payment_address')}</span>
           <div className="flex items-center gap-2">
             <span className="font-mono text-sm">{np.pay_address}</span>
-            <button onClick={() => copyToClipboard(np.pay_address)} className="p-1 rounded hover:bg-gray-100">
+            <button aria-label={t('copy_to_clipboard')} onClick={() => copyToClipboard(np.pay_address)} className="p-1 rounded hover:bg-gray-100">
               <Copy className="w-4 h-4 text-gray-600" />
             </button>
           </div>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-gray-500">Ważne przez</span>
-          <span className="font-medium">{timeLeft > 0 ? formatTime(timeLeft) : 'Wygasło'}</span>
+          <span className="text-gray-500">{t('valid_for')}</span>
+          <span className="font-medium">{timeLeft > 0 ? formatTime(timeLeft) : t('expired')}</span>
         </div>
       </div>
 
       <div className="flex gap-2 mt-2">
-        <button onClick={() => onClose && onClose()} className="flex-1 py-3 bg-gray-200 rounded-lg">Zamknij</button>
+        <button onClick={() => onClose && onClose()} className="flex-1 py-3 bg-gray-200 rounded-lg">{t('back')}</button>
         <button
           onClick={complete}
           disabled={notifying}
@@ -185,10 +189,10 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
           {notifying ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Sprawdzam...
+              {t('checking')}
             </>
           ) : (
-            'Już dokonałem płatności'
+            t('already_paid')
           )}
         </button>
       </div>
@@ -196,7 +200,7 @@ export default function PaymentQr({ data, onClose, onClear }: Props) {
       {notConfirmed && (
         <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
           <p className="text-sm text-amber-800 text-center">
-            Płatność nie została jeszcze potwierdzona. Spróbuj ponownie za chwilę.
+            {t('not_confirmed')}
           </p>
         </div>
       )}

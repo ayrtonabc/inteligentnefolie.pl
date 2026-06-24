@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from 'react';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { headers } from 'next/headers';
 import { VisualEditorProvider } from '@/lib/context/VisualEditorContext';
 import { LanguageProvider } from '@/lib/context/LanguageContext';
@@ -123,6 +125,8 @@ export default async function RootLayout({
     console.error('Error fetching Search Console verification:', error);
   }
 
+  const messages = await getMessages();
+
   return (
     <html lang="pl">
       <head>
@@ -145,20 +149,22 @@ export default async function RootLayout({
       <body className="antialiased font-sans bg-white text-gray-900">
         <AggregateRatingSchema ratingValue="4.8" reviewCount="247" />
         <Suspense fallback={null}>
-          <CookieConsentProvider>
-            <LanguageProvider>
-              <CartProvider>
-                <VisualEditorProvider>
-                  <VisitTracker />
-                  <PopupWrapper>
-                    {children}
-                  </PopupWrapper>
-                  <CartDrawer />
-                  <GDPRBanner />
-                </VisualEditorProvider>
-              </CartProvider>
-            </LanguageProvider>
-          </CookieConsentProvider>
+          <NextIntlClientProvider messages={messages}>
+            <CookieConsentProvider>
+              <LanguageProvider>
+                <CartProvider>
+                  <VisualEditorProvider>
+                    <VisitTracker />
+                    <PopupWrapper>
+                      {children}
+                    </PopupWrapper>
+                    <CartDrawer />
+                    <GDPRBanner />
+                  </VisualEditorProvider>
+                </CartProvider>
+              </LanguageProvider>
+            </CookieConsentProvider>
+          </NextIntlClientProvider>
         </Suspense>
       </body>
     </html>

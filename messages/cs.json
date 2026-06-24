@@ -1,0 +1,53 @@
+{
+  "cart": {
+    "title": "Váš košík",
+    "products_count": "{count} produktů",
+    "products_count_one": "{count} produkt",
+    "products_count_few": "{count} produkty",
+    "empty": "Váš košík je prázdný",
+    "empty_hint": "Přidejte produkty a začněte nakupovat.",
+    "subtotal": "Mezisoučet",
+    "shipping": "Doprava",
+    "free": "Zdarma",
+    "total": "Celkem",
+    "proceed_to_payment": "Přejít k platbě",
+    "processing": "Zpracování...",
+    "secure_payments": "Bezpečné SSL platby • NOW PAYMENTS & TPAY",
+    "remove_item": "Odebrat produkt"
+  },
+  "checkout": {
+    "email_placeholder": "E-mail (povinný)",
+    "name_placeholder": "Jméno a příjmení (nepovinné)",
+    "payment_method": "Způsob platby",
+    "pay_with": "Zaplatit pomocí",
+    "test_mode": "Testovací režim! Částka: {amount} zł\nNakonfigurujte TPAY v .env",
+    "payment_error": "Chyba platby. Zkuste to znovu.",
+    "processing_error": "Chyba při zpracování objednávky",
+    "email_required": "Zadejte e-mailovou adresu",
+    "now_payments": "Now Payments",
+    "tpay": "Tpay (Brzy)"
+  },
+  "payment": {
+    "order_id": "ID objednávky",
+    "fiat_sum": "Částka (fiat)",
+    "crypto_amount": "Částka (krypto)",
+    "crypto_currency": "Měna (krypto)",
+    "payment_address": "Adresa platby",
+    "valid_for": "Platnost",
+    "expired": "Vypršelo",
+    "close": "Zavřít",
+    "back": "Zpět",
+    "already_paid": "Již jsem zaplatil/a",
+    "checking": "Kontroluji...",
+    "not_confirmed": "Platba ještě nebyla potvrzena. Zkuste to prosím za chvíli.",
+    "no_payment_id": "Chybí ID platby",
+    "copy_to_clipboard": "Kopírovat do schránky"
+  },
+  "currency": {
+    "select_currency": "Vyberte měnu",
+    "search_placeholder": "Hledat měnu...",
+    "no_currencies_found": "Měny nenalezeny",
+    "open": "Otevřít",
+    "close": "Zavřít"
+  }
+}

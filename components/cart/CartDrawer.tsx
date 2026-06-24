@@ -5,8 +5,11 @@ import { useCart } from './CartContext';
 import { useEffect, useState } from 'react';
 import PaymentQr from './PaymentQr';
 import CurrencySelect from './CurrencySelect';
+import { useTranslations } from 'next-intl';
 
 export default function CartDrawer() {
+  const t = useTranslations('cart');
+  const tCheckout = useTranslations('checkout');
   const { items, removeItem, updateQuantity, isOpen, setIsOpen, total, clearCart } = useCart();
   const [mounted, setMounted] = useState(false);
   const [customerEmail, setCustomerEmail] = useState('');
@@ -18,10 +21,31 @@ export default function CartDrawer() {
   const [nowPaymentsResult, setNowPaymentsResult] = useState<any | null>(null);
 
   const [currencies, setCurrencies] = useState([]);
-  const [selectedCurrency, setSelectedCurrency] = useState<string | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState<string | null>();
 
   useEffect(() => {
-    setMounted(true);
+    // Check for pending payment immediately on mount
+    const checkPendingPayment = () => {
+      try {
+        const pendingOrder = localStorage.getItem('now_payments_pending_order');
+        console.log('[CartDrawer] Checking pending order:', pendingOrder ? 'Found' : 'Not found');
+        
+        if (pendingOrder) {
+          const parsedOrder = JSON.parse(pendingOrder);
+          console.log('[CartDrawer] Parsed order:', parsedOrder);
+          
+          // Set the state
+          setNowPaymentsResult(parsedOrder);
+          
+          // Open the drawer if there's a pending payment
+          console.log('[CartDrawer] Opening drawer for pending payment');
+          setIsOpen(true);
+        }
+      } catch (error) {
+        console.error('[CartDrawer] Error checking pending order:', error);
+        localStorage.removeItem('now_payments_pending_order');
+      }
+    };
 
     const fetchCurrencies = async () => {
       try {
@@ -29,16 +53,21 @@ export default function CartDrawer() {
         const data = await response.json();
         setCurrencies(data?.currencies || data || []);
       } catch (error) {
-        console.error('Error fetching currencies:', error);
+        console.error('[CartDrawer] Error fetching currencies:', error);
       }
     };
 
+    // Execute checks
+    checkPendingPayment();
     fetchCurrencies();
-  }, []);
+    
+    // Mark as mounted last
+    setMounted(true);
+  }, [setIsOpen]);
 
   const handleCheckout = async () => {
     if (!customerEmail) {
-      alert('Podaj adres email')
+      alert(tCheckout('email_required'))
       return
     }
 
@@ -59,7 +88,7 @@ export default function CartDrawer() {
       const result = await response.json()
 
       if (result.testMode) {
-        alert(`Tryb testowy! Kwota: ${result.amount} zł\nSkonfiguruj TPAY w .env`)
+        alert(tCheckout('test_mode', { amount: result.amount }))
         clearCart()
         setIsOpen(false)
         return
@@ -67,17 +96,18 @@ export default function CartDrawer() {
 
       if (payMethod == 'now_payments') {
         setNowPaymentsResult(result)
+        localStorage.setItem('now_payments_pending_order', JSON.stringify(result))
       } else {
         if (result.redirectUrl) {
           window.location.href = result.redirectUrl
         } else {
-          alert('Błąd płatności. Spróbuj ponownie.')
+          alert(tCheckout('payment_error'))
         }
       }
 
     } catch (error) {
       console.error('Checkout error:', error)
-      alert('Błąd podczas przetwarzania zamówienia')
+      alert(tCheckout('processing_error'))
     } finally {
       setIsCheckingOut(false)
     }
@@ -87,12 +117,6 @@ export default function CartDrawer() {
     const price = Number(cents || 0) / 100;
     return isNaN(price) ? '0.00' : price.toFixed(2).replace('.', ',');
   };
-
-  useEffect(() => {
-    if (!isOpen) {
-      setNowPaymentsResult(null);
-    }
-  }, [isOpen]);
 
   if (!mounted) return null;
 
@@ -114,8 +138,8 @@ export default function CartDrawer() {
                 <ShoppingBag className="w-5 h-5 text-cyan" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Twój Koszyk</h2>
-                <p className="text-xs text-gray-500 uppercase tracking-widest">{items.length} produkty</p>
+                <h2 className="text-xl font-bold text-gray-900">{t('title')}</h2>
+                <p className="text-xs text-gray-500 uppercase tracking-widest">{t('products_count', { count: items.length })}</p>
               </div>
             </div>
             <button
@@ -133,8 +157,8 @@ export default function CartDrawer() {
                 <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
                   <ShoppingBag className="w-10 h-10 text-gray-200" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">Koszyk jest pusty</h3>
-                <p className="text-sm text-gray-500 mt-1">Dodaj produkty, aby rozpocząć zakupy.</p>
+                <h3 className="text-lg font-semibold text-gray-900">{t('empty')}</h3>
+                <p className="text-sm text-gray-500 mt-1">{t('empty_hint')}</p>
               </div>
             ) : (
               items.map((item) => (
@@ -152,6 +176,7 @@ export default function CartDrawer() {
                       <button
                         onClick={() => removeItem(item.id)}
                         className="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                        aria-label={t('remove_item')}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -181,29 +206,31 @@ export default function CartDrawer() {
           </div>
 
           {/* Footer */}
-          {items.length > 0 && (
+          {(items.length > 0 || nowPaymentsResult) && (
             <div className="p-6 border-t border-gray-100 bg-gray-50/50">
               {nowPaymentsResult ? (
-                <PaymentQr data={nowPaymentsResult} onClose={() => setIsOpen(false)} onClear={() => { clearCart(); setIsOpen(false); }} />
+                <PaymentQr data={nowPaymentsResult} onClose={() => setNowPaymentsResult(null)} onClear={() => { localStorage.removeItem('now_payments_pending_order'); clearCart(); setNowPaymentsResult(null); setIsOpen(false); }} />
               ) : (
                 <>
                   <div className="space-y-3 mb-4">
-                    <input
-                      type="email"
-                      placeholder="Email (wymagany)"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Imię i nazwisko (opcjonalnie)"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm mb-4"
-                    />
+                    <div className="flex gap-4 mb-4">
+                      <input
+                        type="email"
+                        placeholder={tCheckout('email_placeholder')}
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm"
+                      />
+                      <input
+                        type="text"
+                        placeholder={tCheckout('name_placeholder')}
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm"
+                      />
+                    </div>
                     {/* Payment method radios (UI only) */}
-                    <div className="flex flex-col gap-2 mt-4">
+                    <div className="flex justify-around gap-2 mt-4">
                       <label className="flex items-center gap-3">
                         <input
                           type="radio"
@@ -213,7 +240,7 @@ export default function CartDrawer() {
                           onChange={() => setPayMethod('now_payments')}
                           className="w-4 h-4"
                         />
-                        <span className="text-sm font-medium">Now Payments</span>
+                        <span className="text-sm font-medium">{tCheckout('now_payments')}</span>
                       </label>
 
                       <label className="flex items-center gap-3 opacity-50">
@@ -226,13 +253,13 @@ export default function CartDrawer() {
                           disabled
                           className="w-4 h-4"
                         />
-                        <span className="text-sm font-medium">Tpay (Próximamente)</span>
+                        <span className="text-sm font-medium">{tCheckout('tpay')}</span>
                       </label>
                     </div>
 
                     {payMethod === 'now_payments' && (
                       <div className="mt-4">
-                        <label className="block text-sm text-gray-500 mb-2">Pagar con</label>
+                        <label className="block text-sm text-gray-500 mb-2">{tCheckout('pay_with')}</label>
                         <CurrencySelect
                           currencies={currencies}
                           value={selectedCurrency}
@@ -243,37 +270,37 @@ export default function CartDrawer() {
                   </div>
                   <div className="space-y-2 mb-6">
                     <div className="flex justify-between text-sm text-gray-500">
-                      <span>Suma częściowa</span>
+                      <span>{t('subtotal')}</span>
                       <span>{formatPrice(total)} zł</span>
                     </div>
                     <div className="flex justify-between text-sm text-gray-500">
-                      <span>Wysyłka</span>
-                      <span className="text-emerald-600 font-medium">Gratis</span>
+                      <span>{t('shipping')}</span>
+                      <span className="text-emerald-600 font-medium">{t('free')}</span>
                     </div>
                     <div className="flex justify-between items-center pt-2">
-                      <span className="text-lg font-bold text-gray-900">Razem</span>
+                      <span className="text-lg font-bold text-gray-900">{t('total')}</span>
                       <span className="text-2xl font-black text-gray-900">{formatPrice(total)} zł</span>
                     </div>
                   </div>
                   <button
                     onClick={handleCheckout}
-                    disabled={isCheckingOut || !customerEmail}
+                    disabled={isCheckingOut || !customerEmail || !selectedCurrency}
                     className="w-full bg-black text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-gray-800 transition-all active:scale-95 shadow-xl shadow-black/5 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isCheckingOut ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        Przetwarzanie...
+                        {t('processing')}
                       </>
                     ) : (
                       <>
-                        Przejdź do płatności
+                        {t('proceed_to_payment')}
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}
                   </button>
                   <p className="text-center text-[10px] text-gray-400 mt-4 uppercase tracking-widest font-medium">
-                    Bezpieczne płatności SSL • NOW PAYMENTS & TPAY
+                    {t('secure_payments')}
                   </p>
                 </>
               )}

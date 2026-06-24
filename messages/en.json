@@ -1,0 +1,53 @@
+{
+  "cart": {
+    "title": "Your Cart",
+    "products_count": "{count} products",
+    "products_count_one": "{count} product",
+    "products_count_few": "{count} products",
+    "empty": "Your cart is empty",
+    "empty_hint": "Add products to start shopping.",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "proceed_to_payment": "Proceed to payment",
+    "processing": "Processing...",
+    "secure_payments": "Secure SSL payments • NOW PAYMENTS & TPAY",
+    "remove_item": "Remove product"
+  },
+  "checkout": {
+    "email_placeholder": "Email (required)",
+    "name_placeholder": "Full name (optional)",
+    "payment_method": "Payment method",
+    "pay_with": "Pay with",
+    "test_mode": "Test mode! Amount: {amount} zł\nConfigure TPAY in .env",
+    "payment_error": "Payment error. Try again.",
+    "processing_error": "Error processing order",
+    "email_required": "Please provide your email address",
+    "now_payments": "Now Payments",
+    "tpay": "Tpay (Coming soon)"
+  },
+  "payment": {
+    "order_id": "Order ID",
+    "fiat_sum": "Sum (fiat)",
+    "crypto_amount": "Amount (crypto)",
+    "crypto_currency": "Currency (crypto)",
+    "payment_address": "Payment address",
+    "valid_for": "Valid for",
+    "expired": "Expired",
+    "close": "Close",
+    "back": "Back",
+    "already_paid": "I have already paid",
+    "checking": "Checking...",
+    "not_confirmed": "Payment has not been confirmed yet. Try again in a moment.",
+    "no_payment_id": "No payment ID",
+    "copy_to_clipboard": "Copy to clipboard"
+  },
+  "currency": {
+    "select_currency": "Select currency",
+    "search_placeholder": "Search currency...",
+    "no_currencies_found": "No currencies found",
+    "open": "Open",
+    "close": "Close"
+  }
+}

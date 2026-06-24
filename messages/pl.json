@@ -1,0 +1,53 @@
+{
+  "cart": {
+    "title": "Twój Koszyk",
+    "products_count": "{count} produkty",
+    "products_count_one": "{count} produkt",
+    "products_count_few": "{count} produkty",
+    "empty": "Koszyk jest pusty",
+    "empty_hint": "Dodaj produkty, aby rozpocząć zakupy.",
+    "subtotal": "Suma częściowa",
+    "shipping": "Wysyłka",
+    "free": "Gratis",
+    "total": "Razem",
+    "proceed_to_payment": "Przejdź do płatności",
+    "processing": "Przetwarzanie...",
+    "secure_payments": "Bezpieczne płatności SSL • NOW PAYMENTS & TPAY",
+    "remove_item": "Usuń produkt"
+  },
+  "checkout": {
+    "email_placeholder": "Email (wymagany)",
+    "name_placeholder": "Imię i nazwisko (opcjonalnie)",
+    "payment_method": "Metoda płatności",
+    "pay_with": "Płacę z",
+    "test_mode": "Tryb testowy! Kwota: {amount} zł\nSkonfiguruj TPAY w .env",
+    "payment_error": "Błąd płatności. Spróbuj ponownie.",
+    "processing_error": "Błąd podczas przetwarzania zamówienia",
+    "email_required": "Podaj adres email",
+    "now_payments": "Now Payments",
+    "tpay": "Tpay (Próximamente)"
+  },
+  "payment": {
+    "order_id": "ID zamówienia",
+    "fiat_sum": "Suma (fiat)",
+    "crypto_amount": "Kwota (crypto)",
+    "crypto_currency": "Waluta (crypto)",
+    "payment_address": "Adres płatności",
+    "valid_for": "Ważne przez",
+    "expired": "Wygasło",
+    "close": "Zamknij",
+    "back": "Wstecz",
+    "already_paid": "Już dokonałem płatności",
+    "checking": "Sprawdzam...",
+    "not_confirmed": "Płatność nie została jeszcze potwierdzona. Spróbuj ponownie za chwilę.",
+    "no_payment_id": "Brak ID płatności",
+    "copy_to_clipboard": "Kopiuj do schowka"
+  },
+  "currency": {
+    "select_currency": "Wybierz walutę",
+    "search_placeholder": "Szukaj waluty...",
+    "no_currencies_found": "Nie znaleziono walut",
+    "open": "Otwórz",
+    "close": "Zamknij"
+  }
+}

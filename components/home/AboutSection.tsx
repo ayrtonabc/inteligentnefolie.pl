@@ -25,7 +25,7 @@ export default function AboutSection({ pageData, lang = 'pl' }: AboutSectionProp
 
   const sectionLabel = getContent('about_section_about', 'O NASZEJ FIRMIE');
   const title = getContent('about_welcome_title', 'Jesteśmy HETOR');
-  const description = getContent('about_welcome_text', 'Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą HETOR Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych.');
+  const description = getContent('about_welcome_text', '...');
   const companyName = getContent('about_company_name', 'HETOR Sp. z o.o.');
   const address = getContent('about_company_address', 'ul. Starołęcka 45, 61-361 Poznań');
   const phone = getContent('about_company_phone', '+48 790 555 900');

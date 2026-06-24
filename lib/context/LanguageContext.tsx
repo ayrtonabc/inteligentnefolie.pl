@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 
-type LanguageCode = 'pl' | 'en' | 'es' | 'de' | 'ua' | 'cz';
+type LanguageCode = 'pl' | 'en' | 'de' | 'cz';
 
 interface LanguageContextType {
   language: LanguageCode;
@@ -21,13 +21,26 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang') as LanguageCode;
     
-    if (urlLang && ['pl', 'en', 'es', 'de', 'ua', 'cz'].includes(urlLang)) {
+    if (urlLang && ['pl', 'en', 'de', 'cz'].includes(urlLang)) {
       setLanguageState(urlLang);
+      // Also set cookie for next-intl
+      document.cookie = `NEXT_LOCALE=${urlLang};path=/;max-age=31536000`;
       return;
     }
 
+    // Check cookie first (next-intl)
+    const cookies = document.cookie.split(';');
+    const nextLocaleCookie = cookies.find(c => c.trim().startsWith('NEXT_LOCALE='));
+    if (nextLocaleCookie) {
+      const cookieLang = nextLocaleCookie.split('=')[1].trim() as LanguageCode;
+      if (['pl', 'en', 'de', 'cz'].includes(cookieLang)) {
+        setLanguageState(cookieLang);
+        return;
+      }
+    }
+
     const stored = window.localStorage.getItem('language') as LanguageCode;
-    if (stored && ['pl', 'en', 'es', 'de', 'ua', 'cz'].includes(stored)) {
+    if (stored && ['pl', 'en', 'de', 'cz'].includes(stored)) {
       setLanguageState(stored);
     }
   }, []);
@@ -64,6 +77,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const setLanguage = useCallback((lang: LanguageCode) => {
     setLanguageState(lang);
     window.localStorage.setItem('language', lang);
+    
+    // Set cookie for next-intl
+    document.cookie = `NEXT_LOCALE=${lang};path=/;max-age=31536000`;
     
     const url = new URL(window.location.href);
     url.searchParams.set('lang', lang);

@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: { searchParams?: Promis
   const pageData = await fetchPageData('/o-nas', lang);
   return generateSEOMetadata(pageData, '/o-nas', {
     title: 'O nas - Wiodący Producent i Instalator Konstrukcji Szklanych w Polsce',
-    description: 'Poznaj HETOR - wiodącego producenta i instalatora konstrukcji szklanych w Polsce. Specjalizujemy się w ściankach szklanych, balustradach i foliach inteligentnych PDLC i LCD.',
+    description: 'Poznaj Altra - wiodącego producenta i instalatora konstrukcji szklanych w Polsce. Specjalizujemy się w ściankach szklanych, balustradach i foliach inteligentnych PDLC i LCD.',
   });
 }
 

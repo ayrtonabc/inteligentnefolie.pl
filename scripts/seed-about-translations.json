@@ -1,0 +1,51 @@
+{
+  "_comment": "Traducciones para /o-nas. Edita los valores (reemplaza los [TRADUCIR...]) y corre `node scripts/seed-about-translations.js --apply`. Si dejas [TRADUCIR], el script usa la versión polaca como placeholder temporal para no fallar.",
+
+  "about_section_about": {
+    "de": "[TRADUCIR] O NASZEJ FIRMIE",
+    "en": "[TRADUCIR] O NASZEJ FIRMIE",
+    "cz": "[TRADUCIR] O NASZEJ FIRMIE"
+  },
+
+  "about_welcome_title": {
+    "de": "[TRADUCIR] Jesteśmy Altra",
+    "en": "[TRADUCIR] Jesteśmy Altra",
+    "cz": "[TRADUCIR] Jesteśmy Altra"
+  },
+
+  "about_welcome_text": {
+    "de": "[TRADUCIR] Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą Altra Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych.",
+    "en": "[TRADUCIR] Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą Altra Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych.",
+    "cz": "[TRADUCIR] Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą Altra Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych."
+  },
+
+  "about_company_name": {
+    "de": "[TRADUCIR] Altra sp. z o.o.",
+    "en": "[TRADUCIR] Altra sp. z o.o.",
+    "cz": "[TRADUCIR] Altra sp. z o.o."
+  },
+
+  "about_company_address": {
+    "de": "[TRADUCIR] Polska",
+    "en": "[TRADUCIR] Polska",
+    "cz": "[TRADUCIR] Polska"
+  },
+
+  "about_company_phone": {
+    "de": "[TRADUCIR] +48 790 555 900",
+    "en": "[TRADUCIR] +48 790 555 900",
+    "cz": "[TRADUCIR] +48 790 555 900"
+  },
+
+  "about_email_1": {
+    "de": "[TRADUCIR] biuro@scianki-szklane.com",
+    "en": "[TRADUCIR] biuro@scianki-szklane.com",
+    "cz": "[TRADUCIR] biuro@scianki-szklane.com"
+  },
+
+  "about_email_2": {
+    "de": "[TRADUCIR] biuro@inteligentnefolie.pl",
+    "en": "[TRADUCIR] biuro@inteligentnefolie.pl",
+    "cz": "[TRADUCIR] biuro@inteligentnefolie.pl"
+  }
+}

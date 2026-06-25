@@ -36,10 +36,10 @@ export default function AboutUs({ pageData, lang = 'pl' }: AboutUsProps) {
   }
 
   const heroImage = getContent('about_hero_image', 'https://pb.fullwork.pl/api/files/pbc_2708086759/1254rurqm6zjscj/1_opt_dy0ut72lqr.webp');
-  const welcomeTitle = getContent('about_welcome_title', 'Jesteśmy HETOR');
-  const welcomeText = getContent('about_welcome_text', 'Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą HETOR Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych.');
-  const companyName = getContent('about_company_name', 'HETOR Sp. z o.o.');
-  const companyAddress = getContent('about_company_address', 'ul. Starołęcka 45, 61-361 Poznań');
+  const welcomeTitle = getContent('about_welcome_title', 'Jesteśmy Altra');
+  const welcomeText = getContent('about_welcome_text', 'Jesteśmy wiodącym producentem i instalatorem konstrukcji szklanych w Polsce. Działamy pod firmą Altra Sp. z o.o. Specjalizujemy się w produkcji ścianek szklanych, balustrad, drzwi szklanych, schodów szklanych, podłóg szklanych oraz innowacyjnych rozwiązań z wykorzystaniem folii inteligentnych.');
+  const companyName = getContent('about_company_name', 'Altra sp. z o.o.');
+  const companyAddress = getContent('about_company_address', 'Polska');
   const companyPhone = getContent('about_company_phone', '+48 790 555 900');
   const email1 = getContent('about_email_1', 'biuro@scianki-szklane.com');
   const email2 = getContent('about_email_2', 'biuro@inteligentnefolie.pl');
@@ -57,8 +57,8 @@ export default function AboutUs({ pageData, lang = 'pl' }: AboutUsProps) {
   const missionText = getContent('about_mission_text', 'Dostarczamy naszym klientom najwyższej jakości rozwiązania szklane, które łączą funkcjonalność z estetyką. Dzięki indywidualnemu podejściu do każdego projektu realizujemy nawet najbardziej wymagające oczekiwania.');
   const missionImage = getContent('about_mission_image', 'https://pb.fullwork.pl/api/files/pbc_2708086759/cmkxjebmhp97nt9/folia_pdlc_samoprzylepna_opt_bjjxds81vd.webp');
   
-  const whyTitle = getContent('about_why_title', 'Dlaczego wybrać HETOR i Inteligentne Folie?');
-  const whyItem1 = getContent('about_why_item_1', 'HETOR i Inteligentne Folie to ta sama firma - lider w branży konstrukcji szklanych w Polsce, działająca pod firmą HETOR Sp. z o.o.');
+  const whyTitle = getContent('about_why_title', 'Dlaczego wybrać Altra i Inteligentne Folie?');
+  const whyItem1 = getContent('about_why_item_1', 'Altra i Inteligentne Folie to ta sama firma - lider w branży konstrukcji szklanych w Polsce, działająca pod firmą Altra Sp. z o.o.');
   const whyItem2 = getContent('about_why_item_2', 'Autoryzowany partner DORMA');
   const whyItem3 = getContent('about_why_item_3', 'Szkło hartowane i laminowane najwyższej jakości');
   const whyItem4 = getContent('about_why_item_4', 'Indywidualne podejście do każdego projektu');
@@ -149,7 +149,7 @@ export default function AboutUs({ pageData, lang = 'pl' }: AboutUsProps) {
     <div className="w-full bg-white">
       <section className="relative w-full h-[50vh] min-h-[300px] md:h-[70vh] md:min-h-[500px] flex items-center justify-center bg-gray-100 mt-16">
         <CMSEditable cmsKey="about_hero_image">
-          <Image src={heroImage} alt="HETOR - Profesjonalne konstrukcje szklane" fill className="object-contain md:object-contain" />
+          <Image src={heroImage} alt="Altra - Profesjonalne konstrukcje szklane" fill className="object-contain md:object-contain" />
         </CMSEditable>
       </section>
 

@@ -3,7 +3,8 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: false,
+    unoptimized: true,
+    domains: ['pb.fullwork.pl', 'fullwork.pl', 'images.pexels.com'],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.pexels.com' },
       { protocol: 'https', hostname: 'www.pexels.com' },

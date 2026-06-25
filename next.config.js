@@ -4,13 +4,11 @@ const withNextIntl = require('next-intl/plugin')('./i18n.ts');
 const nextConfig = {
   images: {
     unoptimized: false,
-    domains: ['pb.fullwork.pl', 'fullwork.pl', 'images.pexels.com'],
     remotePatterns: [
       { protocol: 'https', hostname: 'images.pexels.com' },
       { protocol: 'https', hostname: 'www.pexels.com' },
       { protocol: 'https', hostname: 'pexels.com' },
       { protocol: 'https', hostname: 'pb.fullwork.pl' },
-      { protocol: 'https', hostname: 'pb.fullwork.pl', port: '', pathname: '/api/files/**' },
       { protocol: 'https', hostname: 'fullwork.pl' },
     ],
   },
@@ -20,8 +18,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Forzar barra final para evitar conflictos con el CMS estático
-  trailingSlash: true,
+  // Nota: trailingSlash: true causa 308 en API routes (ej: /api/currencies)
+  // y 404 en archivos estáticos como /placeholder.png
+  // trailingSlash: true,
   async headers() {
     return [
       {

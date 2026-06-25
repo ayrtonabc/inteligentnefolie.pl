@@ -6,8 +6,15 @@
 //   2. CREATE new records for the 8 critical section_keys in de/en/cz (pl already exists)
 //
 // Usage:
-//   node scripts/seed-about-translations.js            # dry-run (default)
-//   node scripts/seed-about-translations.js --apply    # actually write to PB
+//   node scripts/seed-about-translations.js            # dry-run, UPDATES only (HETOR -> Altra)
+//   node scripts/seed-about-translations.js --apply    # apply UPDATES only
+//   node scripts/seed-about-translations.js --with-creates
+//                                                        # also CREATE new records from JSON
+//
+// By default the script ONLY patches existing records that contain "HETOR"
+// (replacing it with "Altra"). The "create new translation records" step is
+// opt-in via --with-creates and only fires for translation entries that have
+// a real (non-placeholder) value in the JSON.
 //
 // Required env:
 //   PB_URL                    e.g. https://pb.fullwork.pl
@@ -15,12 +22,13 @@
 //   PB_ADMIN_PASSWORD         PocketBase superuser password
 //   NEXT_PUBLIC_TENANT_ID     e.g. dktsle4yev6syo4 (the website_id is pbc_2708086759)
 //
-// Reads: scripts/seed-about-translations.json  (the translation data)
+// Reads: scripts/seed-about-translations.json  (the translation data, used only with --with-creates)
 
 const fs = require('fs');
 const path = require('path');
 
 const APPLY = process.argv.includes('--apply');
+const WITH_CREATES = process.argv.includes('--with-creates');
 const PB_URL = process.env.PB_URL || process.env.NEXT_PUBLIC_POCKETBASE_URL || 'https://pb.fullwork.pl';
 const ADMIN_EMAIL = process.env.PB_ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.PB_ADMIN_PASSWORD;
@@ -185,25 +193,27 @@ async function main() {
 
   const creates = [];
   const skipped = [];
-  for (const sectionKey of CRITICAL_SECTION_KEYS) {
-    for (const lang of TARGET_LANGS) {
-      const compositeKey = `${lang}::${sectionKey}`;
-      if (existingKeysByLang.has(compositeKey)) {
-        skipped.push({ lang, sectionKey, reason: 'already exists' });
-        continue;
+  if (WITH_CREATES) {
+    for (const sectionKey of CRITICAL_SECTION_KEYS) {
+      for (const lang of TARGET_LANGS) {
+        const compositeKey = `${lang}::${sectionKey}`;
+        if (existingKeysByLang.has(compositeKey)) {
+          skipped.push({ lang, sectionKey, reason: 'already exists' });
+          continue;
+        }
+        const fromUser = translations[sectionKey]?.[lang];
+        const text = (fromUser && !fromUser.startsWith('[TRADUCIR') && fromUser.trim())
+          ? fromUser
+          : POLISH_TEXTS[sectionKey];
+        if (!fromUser || fromUser.startsWith('[TRADUCIR') || !fromUser.trim()) {
+          log('warn', `No translation for [${lang}] ${sectionKey} — using Polish as placeholder.`);
+        }
+        creates.push({ sectionKey, lang, text, fromUser: !!fromUser });
       }
-      const fromUser = translations[sectionKey]?.[lang];
-      const text = (fromUser && !fromUser.startsWith('[TRADUCIR') && fromUser.trim())
-        ? fromUser
-        : POLISH_TEXTS[sectionKey];
-      if (!fromUser || fromUser.startsWith('[TRADUCIR') || !fromUser.trim()) {
-        log('warn', `No translation for [${lang}] ${sectionKey} — using Polish as placeholder.`);
-      }
-      creates.push({ sectionKey, lang, text, fromUser: !!fromUser });
     }
   }
 
-  console.log(`\n CREATES: ${creates.length}   SKIPPED (already exist): ${skipped.length}`);
+  console.log(`\n CREATES: ${creates.length}${WITH_CREATES ? '' : '   (skipped: --with-creates not set)'}   SKIPPED (already exist): ${skipped.length}`);
   for (const c of creates) {
     log('info', `[${c.lang}] ${c.sectionKey}  ${c.fromUser ? '(translated)' : '(polish placeholder)'}`);
   }

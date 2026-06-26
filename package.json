@@ -11,7 +11,7 @@
     "dev:debug": "cross-env NODE_OPTIONS='--inspect' next dev",
     "dev:inspect": "npm run dev:debug",
     "build:cms": "npm run build --prefix cms && node scripts/deploy-cms.mjs",
-    "build": "npm run build:cms && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },

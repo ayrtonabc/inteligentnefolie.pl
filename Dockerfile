@@ -7,7 +7,7 @@ RUN apk add --no-cache libc6-compat
 
 # Copiar archivos de definición de dependencias
 COPY package.json package-lock.json ./
-COPY cms/package.json ./cms/package.json
+# COPY cms/package.json ./cms/package.json
 
 # Instalar todas las dependencias (incluyendo workspaces)
 RUN npm install
